@@ -20,22 +20,21 @@ class UserViewSet(viewsets.ModelViewSet):
         return (permissions.AllowAny() if self.request.method == 'POST' else IsStaffOrTargetUser(),)
 
 
-class CategoryList(generics.ListAPIView):
+class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+    def get_permissions(self):
+        return (permissions.AllowAny() if self.request.method == 'GET' else IsStaffOrTargetUser(),)
 
-class SiteList(generics.ListCreateAPIView):
+
+class SiteViewSet(viewsets.ModelViewSet):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
+    def get_permissions(self):
+        return (permissions.AllowAny() if self.request.method == 'GET' else permissions.IsAuthenticated(),)
 
-class SiteDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Site.objects.all()
-    serializer_class = SiteSerializer
-    permission_classes = (permissions.IsAuthenticatedOrReadOnly,
-                          IsOwnerOrReadOnly,)
 
 
 class CommentList(generics.ListCreateAPIView):

@@ -2,6 +2,10 @@ import os
 import django
 os.environ['DJANGO_SETTINGS_MODULE'] = 'route4you.settings'
 django.setup()
+#
+# para trabajar este archivo en el django shell:
+# exec(compile(open('./categories/db_setup.py',"rb").read(), 'db_setup', "exec"))
+#
 
 from django.contrib.auth.models import User
 from categories.models import Category, Site, Comment
