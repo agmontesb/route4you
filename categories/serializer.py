@@ -3,10 +3,10 @@ from rest_framework import serializers
 from categories.models import Category, Site, Comment
 
 
-class UserSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
-        fields = ('id', 'username', 'password', 'email',)
+        fields = ('url', 'id', 'username', 'password', 'email',)
         write_only_fields = ('password', )
         read_only_fields = ('is_staff', 'issuperuser', 'is_active', 'date_joined',)
 
@@ -26,20 +26,20 @@ class UserSerializer(serializers.ModelSerializer):
         return instance
 
 
-class CategorySerializer(serializers.ModelSerializer):
+class CategorySerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Category
-        fields = ('id', 'name')
+        fields = ('url', 'id', 'name')
 
 
-class SiteSerializer(serializers.ModelSerializer):
+class SiteSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Site
-        fields = ('id', 'category', 'name', 'address', 'latitud', 'longitud', 'site_logo')
+        fields = ('url', 'id', 'category', 'name', 'address', 'latitud', 'longitud', 'site_logo')
 
 
-class CommentSerializer(serializers.ModelSerializer):
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     class Meta:
         model = Comment
-        fields = ('id', 'site', 'owner', 'rating', 'comment')
+        fields = ('url', 'id', 'site', 'owner', 'rating', 'comment')

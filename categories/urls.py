@@ -12,8 +12,9 @@ router.register(r'sites', views.SiteViewSet, base_name='site')
 urlpatterns = router.urls
 
 urlpatterns += [
-    url(r'^comments/$', views.CommentList.as_view(), name='comment_list'),
-    url(r'^comments/(?P<pk>[0-9]+)/$', views.CommentDetail.as_view(), name='comment_detail'),
+    url(r'^comments/$', views.CommentList.as_view(), name='comment-list'),
+    url(r'^comments/(?P<pk>[0-9]+)/$', views.CommentDetail.as_view(), name='comment-detail'),
+    url(r'^$', views.api_root),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
