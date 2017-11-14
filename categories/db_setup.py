@@ -1,4 +1,6 @@
+import os
 import django
+os.environ['DJANGO_SETTINGS_MODULE'] = 'route4you.settings'
 django.setup()
 
 from django.contrib.auth.models import User
@@ -100,7 +102,7 @@ def dbSetup():
     for siteid, username, rating, comment in comments:
         user = usermap[username]
         site = Site.objects.get(pk=siteid)
-        newcomm = Comment(site=site, user=user, rating=rating, comment=comment)
+        newcomm = Comment(site=site, owner=user, rating=rating, comment=comment)
         newcomm.save()
 
 
