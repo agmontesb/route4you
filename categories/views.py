@@ -22,6 +22,20 @@ class UserViewSet(viewsets.ModelViewSet):
         return (permissions.AllowAny() if self.request.method == 'POST' else IsStaffOrTargetUser(),)
 
 
+@api_view(('POST', ))
+@renderer_classes((renderers.StaticHTMLRenderer,))
+def create_user(request):
+    serialized = UserSerializer(data=request.data, context={'request': request})
+    print(serialized.initial_data)
+    if serialized.is_valid():
+        print(serialized.validated_data)
+        created_user = User(username=serialized.initial_data['username'], email=serialized.initial_data['email'])
+        created_user.set_password(serialized.initial_data['email'])
+        created_user.save()
+        return Response({'username':serialized.initial_data['username']}, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
+
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
@@ -57,10 +71,9 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 @api_view(('GET', ))
 def api_root(request, format=None):
-    data = OrderedDict([
-        ('users', reverse('user-list', request=request, format=format)),
-        ('categories', reverse('category-list', request=request, format=format)),
-        ('sites', reverse('site-list', request=request, format=format)),
-        ('comments', reverse('comment-list', request=request, format=format)),
-    ])
+    data = [{'name':'users', 'url':reverse('user-list', request=request, format=format)},
+            {'name':'categories', 'url':reverse('category-list', request=request, format=format)},
+            {'name':'sites', 'url':reverse('site-list', request=request, format=format)},
+            {'name':'comments', 'url':reverse('comment-list', request=request, format=format)},
+            ]
     return Response(data)
