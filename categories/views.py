@@ -21,7 +21,6 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return (permissions.AllowAny() if self.request.method == 'POST' else IsStaffOrTargetUser(),)
 
-
 @api_view(('POST', ))
 @renderer_classes((renderers.StaticHTMLRenderer,))
 def create_user(request):
@@ -70,6 +69,7 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 @api_view(('GET', ))
+@renderer_classes((renderers.BrowsableAPIRenderer, renderers.StaticHTMLRenderer, renderers.JSONRenderer, ))
 def api_root(request, format=None):
     data = [{'name':'users', 'url':reverse('user-list', request=request, format=format)},
             {'name':'categories', 'url':reverse('category-list', request=request, format=format)},
