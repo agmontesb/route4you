@@ -76,7 +76,9 @@ def api_root(request, format=None):
             {'name':'sites', 'url':reverse('site-list', request=request, format=format)},
             {'name':'comments', 'url':reverse('comment-list', request=request, format=format)},
             ]
-    if format == "html":
+    print(format)
+    print(request.query_params)
+    if format == "html" or "html" in request.query_params['format']:
         data = 'Esta es una prueba'
 
     return Response(data)
