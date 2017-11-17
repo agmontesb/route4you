@@ -1,4 +1,8 @@
 from collections import OrderedDict
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as django_login
+from django.contrib.auth import logout as django_logout
+from django.shortcuts import redirect
 from rest_framework import renderers
 from rest_framework import permissions
 from rest_framework.response import Response
@@ -21,19 +25,35 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return (permissions.AllowAny() if self.request.method == 'POST' else IsStaffOrTargetUser(),)
 
+
 @api_view(('POST', ))
 @renderer_classes((renderers.StaticHTMLRenderer,))
 def create_user(request):
     serialized = UserSerializer(data=request.data, context={'request': request})
-    print(serialized.initial_data)
-    if serialized.is_valid():
-        print(serialized.validated_data)
-        created_user = User(username=serialized.initial_data['username'], email=serialized.initial_data['email'])
-        created_user.set_password(serialized.initial_data['email'])
-        created_user.save()
-        return Response({'username':serialized.initial_data['username']}, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
+    serialized.is_valid(raise_exception=True)
+    serialized.save()
+    Response({'username':serialized.initial_data['username']}, status=status.HTTP_201_CREATED)
+
+
+@api_view(('POST', ))
+@renderer_classes((renderers.TemplateHTMLRenderer, ))
+def login_user(request):
+    data = request.data
+    username, password = data['username'], data['password']
+    user = authenticate(username=username, password=password)
+    if not user:
+        return Response({'detail':'Invalid username or password'}, status=status.HTTP_400_BAD_REQUEST)
+    django_login(request, user)
+    return redirect('/') #Response({'username':username}, status=status.HTTP_200_OK)
+
+
+
+@api_view(('POST', ))
+@renderer_classes((renderers.TemplateHTMLRenderer, ))
+def logout_user(request):
+    django_logout(request)
+    return Response({'detail':'Successfully loged out.'}, template_name='registration/logged_out.html', status=status.HTTP_200_OK)
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -69,7 +89,7 @@ class CommentDetail(generics.RetrieveUpdateDestroyAPIView):
 
 
 @api_view(('GET', ))
-@renderer_classes((renderers.BrowsableAPIRenderer, renderers.StaticHTMLRenderer, renderers.JSONRenderer, ))
+@renderer_classes((renderers.BrowsableAPIRenderer, renderers.JSONRenderer, renderers.StaticHTMLRenderer, ))
 def api_root(request, format=None):
     data = [{'name':'users', 'url':reverse('user-list', request=request, format=format)},
             {'name':'categories', 'url':reverse('category-list', request=request, format=format)},

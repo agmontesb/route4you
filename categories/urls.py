@@ -16,6 +16,8 @@ urlpatterns += [
     url(r'^comments/(?P<pk>[0-9]+)/$', views.CommentDetail.as_view(), name='comment-detail'),
     url(r'^$', views.api_root),
     url(r'^users/register$', views.create_user),
+    url(r'^users/login$', views.login_user),
+    url(r'^users/logout$', views.logout_user),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
