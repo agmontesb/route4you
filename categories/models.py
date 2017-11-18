@@ -4,14 +4,13 @@ from django.db import models
 
 class Category(models.Model):
     name = models.CharField(max_length=100)
-    # category_logo = models.FileField()
 
     def __str__(self):
         return self.name
 
 
 class Site(models.Model):
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, related_name='sites', on_delete=models.CASCADE)
     name = models.CharField(max_length=250)
     address = models.CharField(max_length=500)
     latitud = models.CharField(max_length=100)

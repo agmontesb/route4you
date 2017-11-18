@@ -63,6 +63,14 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return (permissions.AllowAny() if self.request.method == 'GET' else IsStaffOrTargetUser(),)
 
 
+@api_view(('GET', ))
+def CategorySites(request, format=None, pk=None):
+    category = Category.objects.get(pk=pk)
+    sites = category.sites
+    serializer = SiteSerializer(sites.all(), many=True, context={'request':request})
+    return Response(serializer.data)
+
+
 class SiteViewSet(viewsets.ModelViewSet):
     queryset = Site.objects.all()
     serializer_class = SiteSerializer

@@ -12,6 +12,7 @@ router.register(r'sites', views.SiteViewSet, base_name='site')
 urlpatterns = router.urls
 
 urlpatterns += [
+    url(r'^categories/(?P<pk>[0-9]+)/sites$', views.CategorySites, name='category-sites'),
     url(r'^comments/$', views.CommentList.as_view(), name='comment-list'),
     url(r'^comments/(?P<pk>[0-9]+)/$', views.CommentDetail.as_view(), name='comment-detail'),
     url(r'^$', views.api_root),

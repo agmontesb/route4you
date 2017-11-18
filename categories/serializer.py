@@ -27,9 +27,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
+    sites = serializers.HyperlinkedIdentityField(view_name="category-sites")
     class Meta:
         model = Category
-        fields = ('url', 'id', 'name')
+        fields = ('url', 'id', 'name', 'sites')
 
 
 class SiteSerializer(serializers.HyperlinkedModelSerializer):
