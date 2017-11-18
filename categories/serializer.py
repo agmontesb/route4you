@@ -27,16 +27,17 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
 
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    sites = serializers.HyperlinkedIdentityField(view_name="category-sites")
+    sites = serializers.HyperlinkedIdentityField(view_name="category-site-list")
     class Meta:
         model = Category
         fields = ('url', 'id', 'name', 'sites')
 
 
 class SiteSerializer(serializers.HyperlinkedModelSerializer):
+    comments = serializers.HyperlinkedIdentityField(view_name="site-comment-list")
     class Meta:
         model = Site
-        fields = ('url', 'id', 'category', 'name', 'address', 'latitud', 'longitud', 'site_logo')
+        fields = ('url', 'id', 'category', 'name', 'address', 'latitud', 'longitud', 'site_logo', 'comments')
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):

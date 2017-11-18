@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from rest_framework import renderers
 from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, renderer_classes
+from rest_framework.decorators import api_view, renderer_classes, detail_route
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework import generics
@@ -63,12 +63,12 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return (permissions.AllowAny() if self.request.method == 'GET' else IsStaffOrTargetUser(),)
 
 
-@api_view(('GET', ))
-def CategorySites(request, format=None, pk=None):
-    category = Category.objects.get(pk=pk)
-    sites = category.sites
-    serializer = SiteSerializer(sites.all(), many=True, context={'request':request})
-    return Response(serializer.data)
+    @detail_route(methods=('GET', ))
+    def site_list(self, request, pk=None):
+        category = Category.objects.get(pk=pk)
+        sites = category.sites
+        serializer = SiteSerializer(sites.all(), many=True, context={'request':request})
+        return Response(serializer.data)
 
 
 class SiteViewSet(viewsets.ModelViewSet):
@@ -76,8 +76,14 @@ class SiteViewSet(viewsets.ModelViewSet):
     serializer_class = SiteSerializer
 
     def get_permissions(self):
-        return (permissions.AllowAny() if self.request.method == 'GET' else permissions.IsAuthenticated(),)
+        return (permissions.AllowAny() if self.request.method == 'GET' else IsStaffOrTargetUser(),)
 
+    @detail_route(methods=('GET', ))
+    def comment_list(self, request, pk=None):
+        site = Site.objects.get(pk=pk)
+        comments = site.comments
+        serializer = CommentSerializer(comments.all(), many=True, context={'request':request})
+        return Response(serializer.data)
 
 
 class CommentList(generics.ListCreateAPIView):

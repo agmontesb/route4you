@@ -22,7 +22,7 @@ class Site(models.Model):
 
 
 class Comment(models.Model):
-    site = models.ForeignKey(Site, on_delete=models.CASCADE)
+    site = models.ForeignKey(Site, related_name='comments', on_delete=models.CASCADE)
     owner = models.ForeignKey('auth.User', related_name='comments', on_delete=models.CASCADE)
     rating = models.CharField(max_length=100)
     comment = models.CharField(max_length=500)
