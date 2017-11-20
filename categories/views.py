@@ -63,7 +63,7 @@ class CategoryViewSet(viewsets.ModelViewSet):
         return (permissions.AllowAny() if self.request.method == 'GET' else IsStaffOrTargetUser(),)
 
 
-    @detail_route(methods=('GET', ))
+    @detail_route()
     def site_list(self, request, pk=None):
         category = Category.objects.get(pk=pk)
         sites = category.sites
@@ -78,7 +78,7 @@ class SiteViewSet(viewsets.ModelViewSet):
     def get_permissions(self):
         return (permissions.AllowAny() if self.request.method == 'GET' else IsStaffOrTargetUser(),)
 
-    @detail_route(methods=('GET', ))
+    @detail_route()
     def comment_list(self, request, pk=None):
         site = Site.objects.get(pk=pk)
         comments = site.comments
