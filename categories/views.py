@@ -32,11 +32,11 @@ def create_user(request):
     serialized = UserSerializer(data=request.data, context={'request': request})
     serialized.is_valid(raise_exception=True)
     serialized.save()
-    Response({'username':serialized.initial_data['username']}, status=status.HTTP_201_CREATED)
+    Response(data="The user has been created", status=status.HTTP_201_CREATED)
 
 
 @api_view(('POST', ))
-@renderer_classes((renderers.TemplateHTMLRenderer, ))
+@renderer_classes((renderers.StaticHTMLRenderer,))
 def login_user(request):
     data = request.data
     username, password = data['username'], data['password']
@@ -44,7 +44,7 @@ def login_user(request):
     if not user:
         return Response({'detail':'Invalid username or password'}, status=status.HTTP_400_BAD_REQUEST)
     django_login(request, user)
-    return redirect('/') #Response({'username':username}, status=status.HTTP_200_OK)
+    return Response(data="login successful", status=status.HTTP_200_OK)
 
 
 
