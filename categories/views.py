@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from rest_framework import renderers
 from rest_framework import permissions
 from rest_framework.response import Response
-from rest_framework.decorators import api_view, renderer_classes, detail_route
+from rest_framework.decorators import api_view, renderer_classes, detail_route, permission_classes
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework import generics
@@ -27,16 +27,14 @@ class UserViewSet(viewsets.ModelViewSet):
 
 
 @api_view(('POST', ))
-@renderer_classes((renderers.StaticHTMLRenderer,))
 def create_user(request):
     serialized = UserSerializer(data=request.data, context={'request': request})
     serialized.is_valid(raise_exception=True)
     serialized.save()
-    Response(data="The user has been created", status=status.HTTP_201_CREATED)
+    return Response(data="The user has been created", status=status.HTTP_201_CREATED)
 
 
-@api_view(('POST', ))
-@renderer_classes((renderers.StaticHTMLRenderer,))
+@api_view(http_method_names=('POST', ))
 def login_user(request):
     data = request.data
     username, password = data['username'], data['password']
@@ -61,7 +59,6 @@ class CategoryViewSet(viewsets.ModelViewSet):
 
     def get_permissions(self):
         return (permissions.AllowAny() if self.request.method == 'GET' else IsStaffOrTargetUser(),)
-
 
     @detail_route()
     def site_list(self, request, pk=None):
