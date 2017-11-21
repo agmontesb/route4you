@@ -1,0 +1,68 @@
+
+       INSTRUCCIONES PARA INSTALACION EN PYTHONANYWHERE
+       ** Instalando el servidor
+            -- Crear virualenv con python34
+                mkvirtualenv routeforyou --python=/usr/bin/python3.4
+            --Instalar dependencias
+                cd route4you
+                pip install -r requirements.txt
+
+       ** Instalando el servidor
+            -- Se clona el proyecto:
+               git clone https://github.com/agmontesb/route4you.git
+            --Se hacen las migraciones
+               python manage.py makemigrations categories
+               python manage.py migrate
+            --Entrar en el shell
+               python manage.py shell
+            --Ejecutar esta instruccion en el shell para inicializar las bases de datos:
+               exec(compile(open('./categories/db_setup.py',"rb").read(), 'db_setup', "exec"))
+            --Salir del shell
+               exit()
+            --Crear directorio static bajo directorio route4you
+            --Crear directorio static bajo static
+            --Collecstatic
+                python manage.py collectstatic
+
+            --En la pestana WEB del DASHBOARD de pythonanywhere
+                Dar click en el boton "Add a new Wb app"
+                Manual install
+
+             -- CONFIGURACION DEL WEB SERVER
+                Dar click en "WSGI configuration file" y reemplazar su contenido por
+                el ubicado en route4you\pythonanywhere\pythonanywhere_com_wsgi.py,
+                no olvidando reeplazar en ese archivo la etiqueta <<nombre de la cuenta>>
+                por el valor correspondiente
+
+
+                Code:
+                Source code: /home/<<nombre de la cuenta>>/route4you
+                Working directory: /home/<<nombre de la cuenta>>/
+                WSGI configuration file:
+
+                Virtual enviroment:
+                /home/<<nombre de la cuenta>>/.virtualenvs/routeforyou
+
+                Static Files:
+                url: /static/static-only/
+                directory: /home/<<nombre de la cuenta>>/route4you/static/static-only
+
+       ** Actualizando el servidor cuando se modificado el código fuente
+           -- Actualizar el proyecto
+               git pull
+           -- Si se ha modificdo la estructura de las bases de datos
+            --Se hacen las migraciones
+               python manage.py makemigrations categories
+               python manage.py migrate
+            --Entrar en el shell
+               python manage.py shell
+            --Ejecutar esta instruccion en el shell para inicializar las bases de datos:
+               exec(compile(open('./categories/db_setup.py',"rb").read(), 'db_setup', "exec"))
+            --Salir del shell
+               exit()
+            -- En el DASHBOARD en la pestaña WEB dar en el boton RELOAD (boton verde)
+
+
+
+
+

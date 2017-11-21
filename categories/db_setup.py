@@ -2,22 +2,6 @@ import os
 import django
 os.environ['DJANGO_SETTINGS_MODULE'] = 'route4you.settings'
 django.setup()
-#       INSTRUCCIONES PARA INSTALACION EN PYTHONANYWHERE
-#       --Si no se ha clonado el proyecto:
-#               git clone https://github.com/agmontesb/route4you.git
-#       --Si se ha clonado y se quiere actualizar
-#               git pull
-#       --Se hacen las migraciones
-#               python manage.py makemigrations categories
-#               python manage.py migrate
-#       --Entrar en el shell
-#               python manage.py shell
-#       --Ejecutar esta instruccion en el shell:
-#               exec(compile(open('./categories/db_setup.py',"rb").read(), 'db_setup', "exec"))
-#       --Salir del shell
-#               exit()
-#       --En la pestana WEB del pythonanywhere reiniciar el servidor
-#
 
 from django.contrib.auth.models import User
 from categories.models import Category, Site, Comment
