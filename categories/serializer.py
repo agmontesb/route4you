@@ -37,7 +37,7 @@ class SiteSerializer(serializers.HyperlinkedModelSerializer):
     comments = serializers.HyperlinkedIdentityField(view_name="site-comment-list")
     class Meta:
         model = Site
-        fields = ('url', 'id', 'category', 'name', 'address', 'latitud', 'longitud', 'site_logo', 'comments')
+        fields = ('url', 'id', 'category', 'name', 'address', 'latitud', 'longitud', 'site_logo','rank','extras', 'comments')
 
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):

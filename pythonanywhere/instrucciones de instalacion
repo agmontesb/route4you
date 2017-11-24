@@ -3,13 +3,11 @@
        ** Instalando el servidor
             -- Crear virualenv con python34
                 mkvirtualenv routeforyou --python=/usr/bin/python3.4
+            -- Se clona el proyecto:
+               git clone https://github.com/agmontesb/route4you.git
             --Instalar dependencias
                 cd route4you
                 pip install -r requirements.txt
-
-       ** Instalando el servidor
-            -- Se clona el proyecto:
-               git clone https://github.com/agmontesb/route4you.git
             --Se hacen las migraciones
                python manage.py makemigrations categories
                python manage.py migrate
@@ -48,6 +46,8 @@
                 directory: /home/<<nombre de la cuenta>>/route4you/static/static-only
 
        ** Actualizando el servidor cuando se modificado el código fuente
+           -- Ir al directorio route4you
+               Si esta en el directorio raiz ((routeforyou) HH:MM ~ $): cd route4you
            -- Actualizar el proyecto
                git pull
            -- Si se ha modificdo la estructura de las bases de datos

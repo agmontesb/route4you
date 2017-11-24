@@ -1,4 +1,6 @@
 import os
+import random
+from json import dumps as json
 import django
 os.environ['DJANGO_SETTINGS_MODULE'] = 'route4you.settings'
 django.setup()
@@ -12,8 +14,8 @@ usuarios = [
     dict(username='user3', password='user3621124'),
 ]
 
-categorias = ['Museos', 'Parques', 'Parroquias', 'Sitios']
-catlogos   = ['./museo.jpg', './parque.png', './iglesia.jpg', './sitio.png']
+categorias = ['Museos', 'Parques', 'Parroquias', 'Sitios', 'Fakerestaurantes']
+catlogos   = ['./museo.jpg', './parque.png', './iglesia.jpg', './sitio.png', './sitio.png']
 
 sitios = [
         # Museos
@@ -67,6 +69,18 @@ sitios = [
          (3,"Salvators pizza","10.9945999","-74.809596" ),
         ]
 
+Fakerestaurantes = [
+        # Fakerestaurantes
+         (4,"Restaurante1","11.0356800","-74.8356213", json({'subcat':'mariscos', 'desc':'Precios 10.000-60.000'})),
+         (4,"restaurante2","10.9356240","-74.7356657", json({'subcat':'italiana', 'desc':'Precios 10.000-30.000'})),
+         (4,"restaurante3","10.9356720","-74.7356537", json({'subcat':'rapida', 'desc':'Precios 10.000-50.000'})),
+         (4,"restaurante4","10.9356056","-74.7356207", json({'subcat':'rapida', 'desc':'Precios 5.000-20.000'})),
+         (4,"restaurante5","10.9356311","-74.8356191", json({'subcat':'italiana', 'desc':'Precios 20.000-60.000'})),
+         (4,"restaurante6","11.0356601","-74.8356578", json({'subcat':'italiana', 'desc':'Precios 15.000-40.000'})),
+         (4,"restaurante7","11.0356831","-74.8356979", json({'subcat':'mariscos', 'desc':'Precios 18.000-60.000'})),
+    ]
+
+
 comments = [   # site, owner, rating, comment
     (5, 'user1', '3', 'comment' ),
     (10, 'user1', '3', 'comment' ),
@@ -95,12 +109,25 @@ def dbSetup():
         newcat = Category(name=categoryName)
         newcat.save()
 
+    sitefields = ['category', 'name', 'address', 'latitud', 'longitud', 'rank', 'extras']
     catList = Category.objects.all()
     for catid, sname, lat, long in sitios:
         newcat = catList[catid]
-        newSite = Site(category=newcat, name=sname, address='Calle x Carrera y', latitud=lat, longitud=long)
+        values = [newcat, sname, 'Calle x Carrera y', lat, long, random.randint(0,9)]
+        kwargs = dict(zip(sitefields, values))
+        newSite = Site(**kwargs)
         newSite.site_logo.name = catlogos[catid]
         newSite.save()
+
+    for catid, sname, lat, long, extras in Fakerestaurantes:
+        newcat = catList[catid]
+        values = [newcat, sname, 'Calle x Carrera y', lat, long, random.randint(0,9), extras]
+        kwargs = dict(zip(sitefields, values))
+        newSite = Site(**kwargs)
+        newSite.site_logo.name = catlogos[catid]
+        newSite.save()
+
+
 
     for siteid, username, rating, comment in comments:
         user = usermap[username]

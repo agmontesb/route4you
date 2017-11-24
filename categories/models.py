@@ -16,6 +16,8 @@ class Site(models.Model):
     latitud = models.CharField(max_length=100)
     longitud = models.CharField(max_length=100)
     site_logo = models.FileField()
+    rank = models.CharField(max_length=10)
+    extras = models.CharField(max_length=100)
 
     def __str__(self):
         return self.name + ' - ' + self.address
